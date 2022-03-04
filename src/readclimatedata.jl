@@ -77,8 +77,8 @@ extent2range(extent, res) =
 function filename_wind(datasource, org, model, rcp, altitude, year)
     rcpname = year > 2005 ? "rcp$(rcp)" : "historical"
     orgname = isempty(org) ? "" : "_$org"
-    climatefolder = getconfig("climatefolder")
-    filename = "$climatefolder/wind_$(datasource)$(orgname)_$(model)_$(altitude)m_$(rcpname)_$(year).h5"
+    datafolder = getconfig("datafolder")
+    filename = "$datafolder/wind_$(datasource)$(orgname)_$(model)_$(altitude)m_$(rcpname)_$(year).h5"
 end
 
 function savewind(datasource, org, model, rcp, altitude, year)
@@ -149,7 +149,7 @@ function save_climate_data()
 end
 
 function savewind_10year()
-    for year in [1996:2004; 2046:2049; 2051:2055; 2091:2100]
+    for year in [2046:2049; 2051:2055]
         savewind("CORDEX", "ictp", "EC-EARTH", 85, 100, year)
         savewind("HCLIM", "", "EC-EARTH", 85, 100, year)
     end
