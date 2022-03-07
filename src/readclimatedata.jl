@@ -167,8 +167,8 @@ function create_10year_meanwind(datasource, org, model, rcp, altitude, years)
     for year in years[2:end]
         meanwindall += h5read(filename_wind(datasource, org, model, rcp, altitude, year), "/meanwind")
     end
-    climatefolder = getconfig("climatefolder")
-    @time h5open("$climatefolder/meanwind_$(years[1])_$(years[end])_$(datasource)_$(model)_$(altitude)m.h5", "w") do file 
+    datafolder = getconfig("datafolder")
+    @time h5open("$datafolder/meanwind_$(years[1])_$(years[end])_$(datasource)_$(model)_$(altitude)m.h5", "w") do file 
         group = file["/"]
         dataset_mean = create_dataset(group, "meanwind", datatype(Float32), dataspace(size(meanwindall)), chunk=(16,16), blosc=3)
         dataset_extent = create_dataset(group, "extent", datatype(Float64), dataspace(size(extent)))
