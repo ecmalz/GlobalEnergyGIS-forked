@@ -459,12 +459,14 @@ const eurasia92 = [
 const scand_gams = [
     "DK1"   NUTS("DK01","DK02")
     "DK2"   NUTS("DK03","DK04","DK05")
-    "FI"    NUTS("FI19", "FI20", "FI1B", "FI1C", "FI1D")  
+    # "FI"    NUTS("FI19", "FI20", "FI1B", "FI1C", "FI1D")  
+    "FI"    NUTS("FI")  
     "SE1"   NUTS("SE22")
     "SE2"   NUTS("SE11","SE12","SE21","SE23","SE31")
     "SE3"   NUTS("SE32")
     "SE4"   NUTS("SE33")
-    "NO1"   NUTS("NO02","NO08","NO09","NO0A")
+    "NO1"   NUTS("NO01","NO02","NO03","NO04","NO05")
+    # "NO1"   NUTS("NO02","NO08","NO09","NO0A")
     "NO2"   NUTS("NO06")
     "NO3"   NUTS("NO07")
 
