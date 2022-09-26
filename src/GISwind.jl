@@ -129,7 +129,7 @@ function GISwind(; savetodisk=true, plotmasks=false, optionlist...)
     if savetodisk
         mkpath(in_datafolder("output"))
         suffix = isempty(climate_scenario) ? filenamesuffix : "_$climate_scenario$filenamesuffix"
-        matopen(in_datafolder("output", "GISdata_wind$(era_year)_$gisregion$suffix.mat"), "w", compress=true) do file
+        matopen(in_datafolder("output", "GISdata_200wind$(era_year)_$gisregion$suffix.mat"), "w", compress=true) do file
             write(file, "CFtime_windonshoreA", windCF_onshoreA)
             write(file, "CFtime_windonshoreB", windCF_onshoreB)
             write(file, "CFtime_windoffshore", windCF_offshore)
@@ -140,7 +140,7 @@ function GISwind(; savetodisk=true, plotmasks=false, optionlist...)
     end
 
     nothing
-    # return windCF_onshoreA, windCF_onshoreB, windCF_offshore, capacity_onshoreA, capacity_onshoreB, capacity_offshore
+    return windCF_onshoreA, windCF_onshoreB, windCF_offshore, capacity_onshoreA, capacity_onshoreB, capacity_offshore
 end
 
 function read_datasets(options)
@@ -189,6 +189,7 @@ function read_wind_datasets(options, lonrange, latrange)
         meanyears = climyear < 2030 ? "1996_2005" : climyear < 2070 ? "2046_2055" : "2091_2100"
         datasource = contains(climate_scenario, "HCLIM") ? "HCLIM" : "CORDEX"
         meanwind_allyears = h5read("$datafolder/meanwind_$(meanyears)_$(datasource)_EC-EARTH_100m.h5", "/meanwind")
+        println("NOTE h5read: $datafolder/meanwind_$(meanyears)_$(datasource)_EC-EARTH_100m.h5")
     end
 
     windatlas = getwindatlas(wind_speed_altitude)[lonrange,latrange]
@@ -265,11 +266,17 @@ function create_wind_masks(options, regions, offshoreregions, gridaccess, popden
 end
 
 # 0 - 29 m/s
-const windparkcurve = [
-    0.0, 0.0014, 0.0071, 0.0229, 0.0545, 0.1067, 0.1831, 0.2850, 0.4085, 0.5434,
-    0.6744, 0.7847, 0.8614, 0.9048, 0.9266, 0.9353, 0.9373, 0.9375, 0.9375, 0.9375,
-    0.9375, 0.9375, 0.9375, 0.9311, 0.8683, 0.6416, 0.2948, 0.0688, 0.0063, 0.0
-]
+# const windparkcurve = [
+#     0.0, 0.0014, 0.0071, 0.0229, 0.0545, 0.1067, 0.1831, 0.2850, 0.4085, 0.5434,
+#     0.6744, 0.7847, 0.8614, 0.9048, 0.9266, 0.9353, 0.9373, 0.9375, 0.9375, 0.9375,
+#     0.9375, 0.9375, 0.9375, 0.9311, 0.8683, 0.6416, 0.2948, 0.0688, 0.0063, 0.0
+# ]
+const windparkcurve = [0.,    0.,    0.004, 0.032, 0.079, 0.153, 0.261, 0.404, 0.565, 0.744, 0.9,   0.939,
+0.94,  0.94,  0.94,  0.94,  0.94,  0.94,  0.94,  0.94 , 0.94 , 0.917, 0.47,  0.023,
+0. ,   0.  ,  0.  , 0.  ,  0.  ,  0.   ]
+# From KLIVEN/src/powercurve.py 2022-09-20
+
+
 
 function speed2capacityfactor(windspeed)
     if windspeed >= 29 || windspeed < 0
