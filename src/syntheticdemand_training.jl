@@ -18,7 +18,7 @@ function predictdemand(; variables=defaultvariables, gisregion="Europe8",
     model = trainmodel(; nrounds=nrounds, max_depth=max_depth, eta=eta, subsample=subsample, metrics=metrics, more_xgoptions...)
     normdemand = XGBoost.predict(model, traindata)              # mean(normdemand) == 1
     numreg = length(regionlist)
-    demand = reshape(normdemand, (numhours, numreg)) .* (demandpercapita/8760)' .* pop'    # MW
+    demand = reshape(normdemand, (numhours, numreg)) .* (demandpercapita/numhours)' .* pop'    # MW
     println("\nConverting synthetic demand to UTC...")
     for r = 1:numreg
         demand[:,r] = circshift(demand[:,r], round(Int, -offsets[r]))
@@ -27,6 +27,10 @@ function predictdemand(; variables=defaultvariables, gisregion="Europe8",
     JLD.save(in_datafolder("output",
             "SyntheticDemand_$(gisregion)_$sspscenario-$(sspyear)_$era_year.jld"),
             "demand", demand, compress=true)
+    ## ADDED BY ELENA
+    matopen(in_datafolder("output", "SyntheticDemand_$(gisregion)_$sspscenario-$(sspyear)_$era_year.mat"), "w", compress=true) do file
+        write(file, "demand", demand)
+    end    
     nothing
 end
 
