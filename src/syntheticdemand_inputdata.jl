@@ -148,11 +148,14 @@ function buildtrainingdata(; gisregion="Europe8", sspscenario="ssp2-34", sspyear
                     makeregionaldemanddata(gisregion, sspscenario, sspyear)
     scenarioyear = "$(sspscenario[1:4])_$sspyear"
     hours, temp_popcenters = GIStemp(gisregion, scenarioyear, era_year, numcenters, mindist)
+    println("temp hours variable: ", hours)
     offsets, zone_maxpop, population = regional_timezone_offsets_Jan1(gisregion=gisregion, scenarioyear=scenarioyear, era_year=era_year)
 
     numreg, numhours = length(regionlist), length(hours)
+    println("get numhours : ", numhours)
     firsttime = ZonedDateTime.(hours[1], zone_maxpop)
-    zonedtime = hcat(collect.([firsttime[i]:Hour(1):firsttime[i]+Hour(8759) for i = 1:numreg])...)[:]
+    #zonedtime = hcat(collect.([firsttime[i]:Hour(1):firsttime[i]+Hour(8759) for i = 1:numreg])...)[:]
+    zonedtime = hcat(collect.([firsttime[i]:Hour(1):firsttime[i]+Hour(numhours-1) for i = 1:numreg])...)[:]
 
     println("\nShifting hourly temperatures from UTC to local time...")
     temperature_top3_mean = dropdims(mean(temp_popcenters, dims=3), dims=3)
