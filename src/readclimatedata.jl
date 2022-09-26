@@ -149,18 +149,26 @@ function save_climate_data()
 end
 
 function savewind_10year()
-    for year in [2046:2049; 2051:2055]
-        savewind("CORDEX", "ictp", "EC-EARTH", 85, 100, year)
-        savewind("HCLIM", "", "EC-EARTH", 85, 100, year)
+    for year in 2040:2060
+        #savewind("CORDEX", "ictp", "EC-EARTH", 85, 100, year)
+        #savewind("HCLIM", "", "EC-EARTH", 85, 100, year)
+        #savewind("CORDEX", "ictp", "CNRM-CM5", 85, 100, year)
+        #savewind("CORDEX", "cnrm", "CNRM-CM5", 85, 100, year)
+        #savewind("CORDEX", "ictp", "MPI-ESM", 85, 100, year)
+        savewind("CORDEX", "ictp", "NorESM1-M", 85, 100, year)
+
     end
 end
 
 # create_10year_meanwind("CORDEX", "ictp", "EC-EARTH", 85, 100, 1996:2005)
 # create_10year_meanwind("CORDEX", "ictp", "EC-EARTH", 85, 100, 2046:2055)
-# create_10year_meanwind("CORDEX", "ictp", "EC-EARTH", 85, 100, 2091:2100)
+# create_10year_meanwind("CORDEX", "ictp", "CNRM-CM5", 85, 100, 2046:2055)
+# create_10year_meanwind("CORDEX", "ictp", "CNRM-CM5", 85, 100, 2046:2055)
+# create_10year_meanwind("CORDEX", "ictp", "NorESM1-M", 85, 100, 2046:2055)
 # create_10year_meanwind("HCLIM", "", "EC-EARTH", 85, 100, 1996:2005)
 # create_10year_meanwind("HCLIM", "", "EC-EARTH", 85, 100, 2046:2055)
 # create_10year_meanwind("HCLIM", "", "EC-EARTH", 85, 100, 2091:2100)
+# create_10year_meanwind("CORDEX","ictp","MPI-ESM", 85, 100, 2046:2055)
 function create_10year_meanwind(datasource, org, model, rcp, altitude, years)
     meanwindall = h5read(filename_wind(datasource, org, model, rcp, altitude, years[1]), "/meanwind")
     extent = h5read(filename_wind(datasource, org, model, rcp, altitude, years[1]), "/extent")
@@ -346,7 +354,7 @@ function plotSMHImaps(altitude=100, year=2018; method="")
     gwa = gwa_full[2:3:end, 2:3:end]
     drawmap(gwa; scalefactor=(1.0,1.8), colorrange=(0,12), save="gwa_$suffix.png")
     drawmap(gwa_full; scalefactor=(1.0,1.8), colorrange=(0,12), save="gwa_full_$suffix.png")
-    GLMakie.destroy!(GLMakie.global_gl_screen())
+    #GLMakie.destroy!(GLMakie.global_gl_screen())
     return gwa, smhi
 end
 
