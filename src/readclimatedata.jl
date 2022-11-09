@@ -149,13 +149,13 @@ function save_climate_data()
 end
 
 function savewind_10year()
-    for year in 2040:2060
+    for year in 1985:1989
         #savewind("CORDEX", "ictp", "EC-EARTH", 85, 100, year)
-        #savewind("HCLIM", "", "EC-EARTH", 85, 100, year)
+        savewind("HCLIM", "", "EC-EARTH", 85, 100, year)
         #savewind("CORDEX", "ictp", "CNRM-CM5", 85, 100, year)
         #savewind("CORDEX", "cnrm", "CNRM-CM5", 85, 100, year)
         #savewind("CORDEX", "ictp", "MPI-ESM", 85, 100, year)
-        savewind("CORDEX", "ictp", "NorESM1-M", 85, 100, year)
+        #savewind("CORDEX", "ictp", "NorESM1-M", 85, 100, year)
 
     end
 end
